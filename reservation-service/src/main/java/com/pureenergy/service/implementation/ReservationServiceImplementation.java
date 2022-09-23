@@ -35,7 +35,7 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public List<ReservationDTO> getReservationsByMovieId(Long movieId) {
-        if (movieClientService.getMovieById(movieId).getData().getId()==null){
+        if (movieClientService.getMovieById(movieId).getData()==null){
             throw new NoSuchMovieException(movieId);
         }
         List<Reservation> reservationList = reservationRepository.findByMovieId(movieId);
@@ -49,7 +49,7 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public ReservationDTO createReservation(ReservationDTO reservationDTO) {
-        if (movieClientService.getMovieById(reservationDTO.getMovieId()).getData().getId()==null){
+        if (movieClientService.getMovieById(reservationDTO.getMovieId()).getData()==null){
             throw new NoSuchMovieException(reservationDTO.getMovieId());
         }
         log.info("Reservation is created.");
