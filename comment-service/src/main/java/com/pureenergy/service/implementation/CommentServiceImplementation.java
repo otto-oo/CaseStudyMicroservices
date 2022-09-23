@@ -32,7 +32,7 @@ public class CommentServiceImplementation implements CommentService {
 
     @Override
     public List<CommentDTO> getCommentsByMovieId(Long movieId) {
-        if (movieClientService.getMovieById(movieId).getData()==null){
+        if (movieClientService.getMovieById(movieId).getData().getId()==null){
             return null;
         }
         List<Comment> commentList = commentRepository.findByMovieId(movieId);
@@ -46,7 +46,7 @@ public class CommentServiceImplementation implements CommentService {
 
     @Override
     public CommentDTO createComment(CommentDTO commentDTO) {
-        if (movieClientService.getMovieById(commentDTO.getMovieId()).getData()==null){
+        if (movieClientService.getMovieById(commentDTO.getMovieId()).getData().getId()==null){
             return null;
         }
         log.info("Comment is created.");
