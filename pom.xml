@@ -13,7 +13,7 @@
         <module>log-service</module>
         <module>app-client-management</module>
         <module>discovery-service</module>
-        <!--<module>gateway-service</module>-->
+        <module>gateway-service</module>
     </modules>
 
     <parent>

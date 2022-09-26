@@ -14,7 +14,7 @@ spring:
       ddl-auto: create
     show-sql: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/caseStudyDB
+    url: jdbc:postgresql://host.docker.internal:5435/caseStudyDB
     username: postgres
     password: admin
     driver-class-name: org.postgresql.Driver
@@ -27,7 +27,7 @@ eureka:
     health-check-url-path: ${management.context-path}/health
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://discovery-service:8761/eureka/
 
 
 management:
