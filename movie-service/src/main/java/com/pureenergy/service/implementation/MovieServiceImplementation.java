@@ -1,6 +1,5 @@
 package com.pureenergy.service.implementation;
 
-//import com.pureenergy.util.LogUtil;
 import com.pureenergy.dto.LogDTO;
 import com.pureenergy.exception.NoSuchMovieException;
 import com.pureenergy.repository.MovieRepository;
@@ -24,7 +23,6 @@ public class MovieServiceImplementation implements MovieService {
     private MovieRepository movieRepository;
     private MapperUtil mapperUtil;
     private LogClientService logClientService;
-    //private LogUtil logUtil;
 
 
     public MovieServiceImplementation(MovieRepository movieRepository, MapperUtil mapperUtil, LogClientService logClientService) {
@@ -37,9 +35,7 @@ public class MovieServiceImplementation implements MovieService {
     public List<MovieDTO> getAllMovies() {
         List<Movie> movieList = movieRepository.findAll();
         log.info("All movies are retrieved.");
-        //logUtil.createLog(Operation.READ, "All movies are retrieved.");
-        LogDTO logDTO = new LogDTO(LocalDate.now(), Operation.READ, "All movies are retrieved.");
-        logClientService.createLog(logDTO);
+        logClientService.createLog(new LogDTO(LocalDate.now(), Operation.READ, "All movies are retrieved."));
         return movieList
                 .stream()
                 .map(movie -> mapperUtil.convert(movie, new MovieDTO()))
@@ -53,7 +49,7 @@ public class MovieServiceImplementation implements MovieService {
         }
         Movie movie = movieRepository.findById(id).get();
         log.info("Movie id " + id + " is retrieved.");
-        //logUtil.createLog(Operation.READ, "Movie id " + id + " is retrieved.");
+        logClientService.createLog(new LogDTO(LocalDate.now(), Operation.READ, "Movie id " + id + " is retrieved."));
         return mapperUtil.convert(movie, new MovieDTO());
     }
 
@@ -61,7 +57,7 @@ public class MovieServiceImplementation implements MovieService {
     public MovieDTO createMovie(MovieDTO movieDTO) {
         Movie movie = mapperUtil.convert(movieDTO, new Movie());
         log.info("Movie is created");
-        //logUtil.createLog(Operation.CREATE, "Movie is created");
+        logClientService.createLog(new LogDTO(LocalDate.now(), Operation.CREATE, "Movie is created"));
         movieRepository.save(movie);
         return movieDTO;
     }
