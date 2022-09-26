@@ -2,8 +2,8 @@ package com.pureenergy.service.implementation;
 
 import com.pureenergy.dto.LogDTO;
 import com.pureenergy.entity.Log;
-import com.pureenergy.enums.Operation;
 import com.pureenergy.repository.LogRepository;
+import com.pureenergy.service.LogClientService;
 import com.pureenergy.service.LogService;
 import com.pureenergy.util.MapperUtil;
 import org.springframework.stereotype.Service;
