@@ -8,6 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
+@EnableFeignClients
 @EnableDiscoveryClient
 public class MovieServiceApplication {
 

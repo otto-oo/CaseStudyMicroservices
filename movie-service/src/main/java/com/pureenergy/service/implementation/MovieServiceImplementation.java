@@ -1,8 +1,10 @@
 package com.pureenergy.service.implementation;
 
 //import com.pureenergy.util.LogUtil;
+import com.pureenergy.dto.LogDTO;
 import com.pureenergy.exception.NoSuchMovieException;
 import com.pureenergy.repository.MovieRepository;
+import com.pureenergy.service.LogClientService;
 import com.pureenergy.service.MovieService;
 import com.pureenergy.dto.MovieDTO;
 import com.pureenergy.entity.Movie;
@@ -11,6 +13,7 @@ import com.pureenergy.util.MapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,12 +23,14 @@ public class MovieServiceImplementation implements MovieService {
 
     private MovieRepository movieRepository;
     private MapperUtil mapperUtil;
+    private LogClientService logClientService;
     //private LogUtil logUtil;
 
 
-    public MovieServiceImplementation(MovieRepository movieRepository, MapperUtil mapperUtil) {
+    public MovieServiceImplementation(MovieRepository movieRepository, MapperUtil mapperUtil, LogClientService logClientService) {
         this.movieRepository = movieRepository;
         this.mapperUtil = mapperUtil;
+        this.logClientService = logClientService;
     }
 
     @Override
@@ -33,6 +38,8 @@ public class MovieServiceImplementation implements MovieService {
         List<Movie> movieList = movieRepository.findAll();
         log.info("All movies are retrieved.");
         //logUtil.createLog(Operation.READ, "All movies are retrieved.");
+        LogDTO logDTO = new LogDTO(LocalDate.now(), Operation.READ, "All movies are retrieved.");
+        logClientService.createLog(logDTO);
         return movieList
                 .stream()
                 .map(movie -> mapperUtil.convert(movie, new MovieDTO()))

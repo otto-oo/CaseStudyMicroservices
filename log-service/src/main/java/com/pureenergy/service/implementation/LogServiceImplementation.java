@@ -2,6 +2,7 @@ package com.pureenergy.service.implementation;
 
 import com.pureenergy.dto.LogDTO;
 import com.pureenergy.entity.Log;
+import com.pureenergy.enums.Operation;
 import com.pureenergy.repository.LogRepository;
 import com.pureenergy.service.LogService;
 import com.pureenergy.util.MapperUtil;
@@ -38,6 +39,13 @@ public class LogServiceImplementation implements LogService {
                 .stream()
                 .map(log -> mapperUtil.convert(log, new LogDTO()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public LogDTO createLog(LogDTO logDTO) {
+        Log log = mapperUtil.convert(logDTO, new Log());
+        logRepository.save(log);
+        return mapperUtil.convert(log, new LogDTO());
     }
 }
 

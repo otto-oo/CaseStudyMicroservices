@@ -16,4 +16,10 @@ public class LogDTO {
     private Operation operation;
     private String message;
 
+    public LogDTO(LocalDate logDate, Operation operation, String message) {
+        this.logDate = logDate;
+        this.operation = operation;
+        this.message = message;
+    }
+
 }

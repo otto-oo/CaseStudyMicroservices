@@ -1,13 +1,12 @@
 package com.pureenergy.controller;
 
+import com.pureenergy.dto.LogDTO;
 import com.pureenergy.entity.ResponseWrapper;
+import com.pureenergy.enums.Operation;
 import com.pureenergy.service.LogService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
@@ -32,5 +31,11 @@ public class LogController {
     public ResponseEntity<ResponseWrapper> getAllLogs(){
         return ResponseEntity
                 .ok(new ResponseWrapper("All logs are retrieved", logService.getAllLogs()));
+    }
+
+    @PostMapping
+    public ResponseEntity<ResponseWrapper> createLog(@RequestBody LogDTO logDTO){
+        return ResponseEntity
+                .ok(new ResponseWrapper("Log is saved", logService.createLog(logDTO)));
     }
 }
