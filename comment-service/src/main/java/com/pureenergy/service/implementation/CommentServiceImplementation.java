@@ -1,6 +1,7 @@
 package com.pureenergy.service.implementation;
 
 import com.pureenergy.dto.LogDTO;
+import com.pureenergy.dto.MovieDTO;
 import com.pureenergy.enums.Operation;
 import com.pureenergy.repository.CommentRepository;
 import com.pureenergy.service.CommentService;
@@ -9,10 +10,14 @@ import com.pureenergy.service.MovieClientService;
 import com.pureenergy.dto.CommentDTO;
 import com.pureenergy.entity.Comment;
 import com.pureenergy.util.MapperUtil;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +30,8 @@ public class CommentServiceImplementation implements CommentService {
     private LogClientService logClientService;
     private MovieClientService movieClientService;
 
+    private static Logger logger = LoggerFactory.getLogger(CommentService .class);
+
     public CommentServiceImplementation(CommentRepository commentRepository, MapperUtil mapperUtil, LogClientService logClientService, MovieClientService movieClientService) {
         this.commentRepository = commentRepository;
         this.mapperUtil = mapperUtil;
@@ -33,6 +40,7 @@ public class CommentServiceImplementation implements CommentService {
     }
 
     @Override
+    @CircuitBreaker(name="movie-service",fallbackMethod = "movieServiceFallBack")
     public List<CommentDTO> getCommentsByMovieId(Long movieId) {
         if (movieClientService.getMovieById(movieId).getData()==null){
             return null;
@@ -44,6 +52,11 @@ public class CommentServiceImplementation implements CommentService {
                 .stream()
                 .map(comment -> mapperUtil.convert(comment, new CommentDTO()))
                 .collect(Collectors.toList());
+    }
+
+    public List<CommentDTO> movieServiceFallBack(Long movieId, Exception e){
+        logger.error("exception{}",e.getMessage());
+        return new ArrayList<>();
     }
 
     @Override
