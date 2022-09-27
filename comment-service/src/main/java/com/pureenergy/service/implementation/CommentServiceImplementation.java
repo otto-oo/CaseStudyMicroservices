@@ -11,6 +11,7 @@ import com.pureenergy.dto.CommentDTO;
 import com.pureenergy.entity.Comment;
 import com.pureenergy.util.MapperUtil;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,7 @@ public class CommentServiceImplementation implements CommentService {
 
     @Override
     @CircuitBreaker(name="movie-service",fallbackMethod = "movieServiceFallBack")
+    @Retry(name = "movie-service",fallbackMethod = "movieServiceRetryFallBack")
     public List<CommentDTO> getCommentsByMovieId(Long movieId) {
         if (movieClientService.getMovieById(movieId).getData()==null){
             return null;
@@ -56,6 +58,11 @@ public class CommentServiceImplementation implements CommentService {
 
     public List<CommentDTO> movieServiceFallBack(Long movieId, Exception e){
         logger.error("exception{}",e.getMessage());
+        return new ArrayList<>();
+    }
+
+    public List<CommentDTO> movieServiceRetryFallBack(Long movieId,Exception e) {
+        logger.error("Retried 3 times. Movie-service is not healthy {}", e.getMessage());
         return new ArrayList<>();
     }
 
