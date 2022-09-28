@@ -29,7 +29,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ResponseWrapper> deleteReservationsById(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<ResponseWrapper> deleteReservationsById(@PathVariable("id") Long id) {
         return ResponseEntity
                 .ok(new ResponseWrapper("Reservation is canceled depends on reservation id " + id + ".",reservationService.deleteReservation(id)));
     }

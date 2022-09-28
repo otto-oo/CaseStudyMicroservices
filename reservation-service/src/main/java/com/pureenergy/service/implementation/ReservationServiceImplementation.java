@@ -1,6 +1,5 @@
 package com.pureenergy.service.implementation;
 
-import com.pureenergy.dto.CommentDTO;
 import com.pureenergy.dto.LogDTO;
 import com.pureenergy.dto.ReservationDTO;
 import com.pureenergy.entity.Reservation;

@@ -10,6 +10,6 @@ public interface ReservationService {
 
     ReservationDTO createReservation(ReservationDTO reservationDTO);
 
-    ReservationDTO deleteReservation(Long id) throws Exception;
+    ReservationDTO deleteReservation(Long id);
 }
 
