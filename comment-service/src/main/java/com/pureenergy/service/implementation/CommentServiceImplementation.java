@@ -56,17 +56,9 @@ public class CommentServiceImplementation implements CommentService {
                 .collect(Collectors.toList());
     }
 
-    public List<CommentDTO> movieServiceFallBack(Long movieId, Exception e){
-        logger.error("exception{}",e.getMessage());
-        return new ArrayList<>();
-    }
-
-    public List<CommentDTO> movieServiceRetryFallBack(Long movieId,Exception e) {
-        logger.error("Retried 3 times. Movie-service is not healthy {}", e.getMessage());
-        return new ArrayList<>();
-    }
-
     @Override
+    @CircuitBreaker(name="movie-service",fallbackMethod = "movieServiceFallBack")
+    @Retry(name = "movie-service",fallbackMethod = "movieServiceRetryFallBack")
     public CommentDTO createComment(CommentDTO commentDTO) {
         if (movieClientService.getMovieById(commentDTO.getMovieId()).getData()==null){
             return null;
@@ -78,5 +70,13 @@ public class CommentServiceImplementation implements CommentService {
         return commentDTO;
     }
 
+    public List<CommentDTO> movieServiceFallBack(Long movieId, Exception e){
+        logger.error("exception{}",e.getMessage());
+        return new ArrayList<>();
+    }
 
+    public List<CommentDTO> movieServiceRetryFallBack(Long movieId,Exception e) {
+        logger.error("Retried 3 times. Movie-service is not healthy {}", e.getMessage());
+        return new ArrayList<>();
+    }
 }
