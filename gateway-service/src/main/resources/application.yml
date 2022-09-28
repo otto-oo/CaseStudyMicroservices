@@ -32,7 +32,11 @@ spring:
             - Path=/pureenergy/dev/log/**
           filters:
             - RewritePath=/pureenergy/dev/log/(?<segment>.*),/$\{segment}
-
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://host.docker.internal:9411
 
 
 server:
