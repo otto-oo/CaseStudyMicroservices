@@ -60,8 +60,8 @@ public class ReservationServiceImplementation implements ReservationService {
     }
 
     @Override
-    @CircuitBreaker(name="movie-service",fallbackMethod = "movieServiceFallBack")
-    @Retry(name = "movie-service",fallbackMethod = "movieServiceRetryFallBack")
+    @CircuitBreaker(name="movie-service",fallbackMethod = "movieServiceFallBack2")
+    @Retry(name = "movie-service",fallbackMethod = "movieServiceRetryFallBack2")
     public ReservationDTO createReservation(ReservationDTO reservationDTO) {
         if (movieClientService.getMovieById(reservationDTO.getMovieId()).getData()==null){
             throw new NoSuchMovieException(reservationDTO.getMovieId());
@@ -74,7 +74,7 @@ public class ReservationServiceImplementation implements ReservationService {
     }
 
     @Override
-    public ReservationDTO deleteReservation(Long id) throws Exception {
+    public ReservationDTO deleteReservation(Long id){
         if (!reservationRepository.findById(id).isPresent()){
             throw new NoSuchReservationException(id);
         }
@@ -86,13 +86,24 @@ public class ReservationServiceImplementation implements ReservationService {
         return mapperUtil.convert(reservation, new ReservationDTO());
     }
 
-    public List<CommentDTO> movieServiceFallBack(Long movieId, Exception e){
+    public List<ReservationDTO> movieServiceFallBack(Long movieId, Exception e){
         logger.error("exception{}",e.getMessage());
         return new ArrayList<>();
     }
 
-    public List<CommentDTO> movieServiceRetryFallBack(Long movieId,Exception e) {
-        logger.error("Retried 3 times. Movie-service is not healthy {}", e.getMessage());
+    public ReservationDTO movieServiceFallBack2(ReservationDTO reservationDTO, Exception e){
+        logger.error("exception{}",e.getMessage());
+        return new ReservationDTO();
+    }
+
+    public List<ReservationDTO> movieServiceRetryFallBack(Long movieId,Exception e){
+        logger.error("Retried 3 times. Movie-service is not healthy {}",e.getMessage());
         return new ArrayList<>();
     }
+
+    public ReservationDTO movieServiceRetryFallBack2(ReservationDTO reservationDTO,Exception e){
+        logger.error("Retried 3 times. Movie-service is not healthy {}",e.getMessage());
+        return new ReservationDTO();
+    }
+
 }

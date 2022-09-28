@@ -1,7 +1,6 @@
 package com.pureenergy.service.implementation;
 
 import com.pureenergy.dto.LogDTO;
-import com.pureenergy.dto.MovieDTO;
 import com.pureenergy.enums.Operation;
 import com.pureenergy.repository.CommentRepository;
 import com.pureenergy.service.CommentService;
@@ -41,7 +40,7 @@ public class CommentServiceImplementation implements CommentService {
     }
 
     @Override
-    @CircuitBreaker(name="movie-service",fallbackMethod = "movieServiceFallBack")
+    @CircuitBreaker(name="movie-service", fallbackMethod = "movieServiceFallBack")
     @Retry(name = "movie-service",fallbackMethod = "movieServiceRetryFallBack")
     public List<CommentDTO> getCommentsByMovieId(Long movieId) {
         if (movieClientService.getMovieById(movieId).getData()==null){
@@ -57,8 +56,8 @@ public class CommentServiceImplementation implements CommentService {
     }
 
     @Override
-    @CircuitBreaker(name="movie-service",fallbackMethod = "movieServiceFallBack")
-    @Retry(name = "movie-service",fallbackMethod = "movieServiceRetryFallBack")
+    @CircuitBreaker(name="movie-service", fallbackMethod = "movieServiceFallBack2")
+    @Retry(name = "movie-service",fallbackMethod = "movieServiceRetryFallBack2")
     public CommentDTO createComment(CommentDTO commentDTO) {
         if (movieClientService.getMovieById(commentDTO.getMovieId()).getData()==null){
             return null;
@@ -75,8 +74,19 @@ public class CommentServiceImplementation implements CommentService {
         return new ArrayList<>();
     }
 
-    public List<CommentDTO> movieServiceRetryFallBack(Long movieId,Exception e) {
-        logger.error("Retried 3 times. Movie-service is not healthy {}", e.getMessage());
+    public CommentDTO movieServiceFallBack2(CommentDTO commentDTO, Exception e){
+        logger.error("exception{}",e.getMessage());
+        return new CommentDTO();
+    }
+
+    public List<CommentDTO> movieServiceRetryFallBack(Long movieId,Exception e){
+        logger.error("Retried 3 times. Movie-service is not healthy {}",e.getMessage());
         return new ArrayList<>();
     }
+
+    public CommentDTO movieServiceRetryFallBack2(CommentDTO commentDTO,Exception e){
+        logger.error("Retried 3 times. Movie-service is not healthy {}",e.getMessage());
+        return new CommentDTO();
+    }
+
 }
