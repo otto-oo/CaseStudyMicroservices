@@ -2,8 +2,13 @@ spring:
   application:
     name: config-server
   profiles:
-    active: native
+    active: git
   cloud:
-    server:
-      native:
-        search-locations: classpath:/config
+    config:
+      server:
+        git:
+          uri: https://github.com/otto-oo/CaseStudyMicroservices-config.git
+            default-label: master
+            username: otto-oo
+            password: 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
+            fail-fast: true
