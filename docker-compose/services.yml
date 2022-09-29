@@ -24,10 +24,14 @@ services:
     image: ${GROUP_ID}/movie-service:${SERVICE_VERSION:-latest}
     environment:
       - "PROFILE=dev"
+      - "CONFIGSERVER_URI=http://configserver:8888"
+      - "CONFIGSERVER_PORT=8888"
       - "JAVA_OPTS:-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007 -Xms128m -Xmx256m"
     depends_on:
       database:
         condition: service_healthy
+      configserver:
+        condition: service_started
     ports:
       - "9091:9091"
     networks:
@@ -36,10 +40,14 @@ services:
     image: ${GROUP_ID}/comment-service:${SERVICE_VERSION:-latest}
     environment:
       - "PROFILE=dev"
+      - "CONFIGSERVER_URI=http://configserver:8888"
+      - "CONFIGSERVER_PORT=8888"
       - "JAVA_OPTS:-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007 -Xms128m -Xmx256m"
     depends_on:
       database:
         condition: service_healthy
+      configserver:
+        condition: service_started
     ports:
       - "9092:9092"
     networks:
@@ -48,10 +56,14 @@ services:
     image: ${GROUP_ID}/reservation-service:${SERVICE_VERSION:-latest}
     environment:
       - "PROFILE=dev"
+      - "CONFIGSERVER_URI=http://configserver:8888"
+      - "CONFIGSERVER_PORT=8888"
       - "JAVA_OPTS:-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007 -Xms128m -Xmx256m"
     depends_on:
       database:
         condition: service_healthy
+      configserver:
+        condition: service_started
     ports:
       - "9093:9093"
     networks:
@@ -60,10 +72,14 @@ services:
     image: ${GROUP_ID}/log-service:${SERVICE_VERSION:-latest}
     environment:
       - "PROFILE=dev"
+      - "CONFIGSERVER_URI=http://configserver:8888"
+      - "CONFIGSERVER_PORT=8888"
       - "JAVA_OPTS:-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5007 -Xms128m -Xmx256m"
     depends_on:
       database:
         condition: service_healthy
+      configserver:
+        condition: service_started
     ports:
       - "9094:9094"
     networks:
@@ -115,6 +131,14 @@ services:
       - prometheus
     networks:
       - backend
+  configserver:
+    image: ${GROUP_ID}/config-server:${SERVICE_VERSION:-latest}
+    ports:
+      - "8888:8888"
+    networks:
+      backend:
+        aliases:
+          - "configserver"
 networks:
   backend:
     driver: bridge
