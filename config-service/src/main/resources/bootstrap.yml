@@ -10,5 +10,5 @@ spring:
           uri: https://github.com/otto-oo/CaseStudyMicroservices-config.git
             default-label: master
             username: otto-oo
-            password: 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
+            password: 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
       fail-fast: true
