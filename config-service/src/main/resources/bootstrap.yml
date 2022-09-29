@@ -8,7 +8,7 @@ spring:
       server:
         git:
           uri: https://github.com/otto-oo/CaseStudyMicroservices-config.git
-            default-label: master
-            username: otto-oo
-            password: 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
+          default-label: master
+          username: otto-oo
+          password: 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
       fail-fast: true
