@@ -24,7 +24,7 @@ spring:
   zipkin:
     base-url: http://host.docker.internal:9411
 server:
-  port: 9093
+#  port: 9093
 
 eureka:
   instance:

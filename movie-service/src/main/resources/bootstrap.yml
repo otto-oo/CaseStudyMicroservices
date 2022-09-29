@@ -1,8 +1,10 @@
 spring:
   application:
-    name: log-service
+    name: movie-service
   profiles:
     active: default
+  main:
+    allow-bean-definition-overriding: true
 
   jpa:
     properties:
@@ -22,7 +24,7 @@ spring:
   zipkin:
     base-url: http://host.docker.internal:9411
 server:
-  port: 9094
+  port: 9091
 
 eureka:
   instance:
@@ -47,9 +49,36 @@ management:
 info:
   application:
     name: ${spring.application.name}
-    description: Ticketing Application
+    description: Case Study Microservices
     version: '@project.version@'
     spring-cloud-version: '@spring-cloud.version@'
     spring-boot-version: '@project.parent.version@'
 
-
+#resilience4j:
+#  circuitbreaker:
+#    configs:
+#      default:
+#        automaticTransitionFromOpenToHalfOpenEnabled: true
+#        failureRateThreshold: 50
+#        permittedNumberOfCallsInHalfOpenState: 2
+#        slidingWindowSize: 2
+#        waitDurationInOpenState: 10000
+#        slidingWindowType: COUNT_BASED
+#    instances:
+#      comment-service:
+#        baseConfig: default
+#        waitDurationInOpenState: 15000
+#      reservation-service:
+#        baseConfig: default
+#        waitDurationInOpenState: 20000
+#      log-service:
+#        baseConfig: default
+#        waitDurationInOpenState: 20000
+#  retry:
+#    configs:
+#      default:
+#        maxAttempts: 3
+#        waitDuration: 200
+#    instances:
+#      comment-service:
+#        baseConfig: default
