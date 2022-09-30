@@ -59,6 +59,8 @@ spring:
     name: reservation-service
   profiles:
     active: reservation_service
+  main:
+    allow-bean-definition-overriding: true
   cloud:
     config:
       name: config-client

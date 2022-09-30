@@ -59,6 +59,8 @@ spring:
     name: log-service
   profiles:
     active: log_service
+  main:
+    allow-bean-definition-overriding: true
   cloud:
     config:
       name: config-client
